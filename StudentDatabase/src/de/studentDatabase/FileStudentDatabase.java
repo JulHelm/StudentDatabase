@@ -1,39 +1,44 @@
 package de.studentDatabase;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Arrays;
 
 public class FileStudentDatabase implements StudentDatabase{
 
+	private String[] students = new String[0];
 		
 	@SuppressWarnings("null")
 	@Override
 	public String[] readAllStudents() throws StudentDatabaseException {
 		try (BufferedReader b = new BufferedReader(new FileReader("datenbank.txt"))){
-			String[] a = new String[10];
-			int i = 0;
-			String line = null;
-			while ((line=b.readLine()) != null) {
-				a[i++] = line;
-				
-			}return a;
 			
+			while (b.ready()) {
+				String line = b.readLine();
+				students = Arrays.copyOf(students, students.length + 1);
+				students[students.length - 1] = line;
+			}
+			return students;
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new StudentDatabaseException(e);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new StudentDatabaseException(e);
 		}
-		return null;
+		
 	}
 
 	@Override
 	public void addStudent(String name) throws StudentDatabaseException {
-		// TODO Auto-generated method stub
-		
+		try (BufferedWriter b = new BufferedWriter(new FileWriter("datenbank.txt", true))){
+			b.write("\n"+name);
+		} catch (FileNotFoundException e) {
+			throw new StudentDatabaseException(e);
+		} catch (IOException e) {
+			throw new StudentDatabaseException(e);
+		}
 	}
-
 }

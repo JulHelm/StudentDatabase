@@ -4,14 +4,17 @@ public class TestStudentDatabase {
 	
 	public static void main(String[] args) {
 		
-		StudentDatabase sb = new FileStudentDatabase();
+		StudentDatabase sd = new FileStudentDatabase();
 		
 		try {
-			String[] students = sb.readAllStudents();
+			sd.addStudent("12345");
+			
+			String[] students = sd.readAllStudents();
 			for (String student : students) {
 				System.out.println(student);
 			}
 		} catch (StudentDatabaseException e) {
+			System.out.println("Fehler");
 			e.printStackTrace();
 		}
 		
